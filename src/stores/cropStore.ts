@@ -55,6 +55,21 @@ export interface Farmer {
   language: 'en' | 'hi' | 'ta';
 }
 
+export interface User {
+  id: string;
+  username: string;
+  password: string;
+  role: 'farmer' | 'admin';
+  name: string;
+  farmIds?: string[];
+}
+
+export interface AuthState {
+  isAuthenticated: boolean;
+  currentUser: User | null;
+  loginError: string | null;
+}
+
 interface CropStore {
   // Data
   farms: Farm[];
@@ -63,11 +78,15 @@ interface CropStore {
   weatherData: WeatherData[];
   recommendations: CropRecommendation[];
   cropRules: CropRule[];
-  currentUser: 'farmer' | 'admin';
   selectedFarm: string | null;
+  
+  // Authentication
+  auth: AuthState;
+  users: User[];
 
   // Actions
-  setCurrentUser: (user: 'farmer' | 'admin') => void;
+  login: (username: string, password: string) => boolean;
+  logout: () => void;
   setSelectedFarm: (farmId: string) => void;
   generateRecommendations: (farmId: string) => void;
   updateCropRule: (rule: CropRule) => void;
@@ -151,6 +170,39 @@ const initialFarmers: Farmer[] = [
   },
 ];
 
+const initialUsers: User[] = [
+  {
+    id: 'user-1',
+    username: 'raj.farmer',
+    password: 'farmer123',
+    role: 'farmer',
+    name: 'Raj Patel',
+    farmIds: ['farm-1', 'farm-2'],
+  },
+  {
+    id: 'user-2',
+    username: 'priya.farmer',
+    password: 'farmer123',
+    role: 'farmer',
+    name: 'Priya Sharma',
+    farmIds: ['farm-3'],
+  },
+  {
+    id: 'admin-1',
+    username: 'admin',
+    password: 'admin123',
+    role: 'admin',
+    name: 'Dr. Agricultural Expert',
+  },
+  {
+    id: 'admin-2',
+    username: 'supervisor',
+    password: 'super123',
+    role: 'admin',
+    name: 'Farm Supervisor',
+  },
+];
+
 const initialCropRules: CropRule[] = [
   {
     id: 'rule-1',
@@ -190,17 +242,54 @@ export const useCropStore = create<CropStore>((set, get) => ({
   // Initial state
   farms: initialFarms,
   farmers: initialFarmers,
+  users: initialUsers,
+  auth: {
+    isAuthenticated: false,
+    currentUser: null,
+    loginError: null,
+  },
   soilData: Object.fromEntries(
     initialFarms.map(farm => [farm.id, generateSoilData()])
   ),
   weatherData: generateWeatherData(),
   recommendations: [],
   cropRules: initialCropRules,
-  currentUser: 'farmer',
-  selectedFarm: 'farm-1',
+  selectedFarm: null,
 
   // Actions
-  setCurrentUser: (user) => set({ currentUser: user }),
+  login: (username, password) => {
+    const user = get().users.find(u => u.username === username && u.password === password);
+    if (user) {
+      set(state => ({
+        auth: {
+          isAuthenticated: true,
+          currentUser: user,
+          loginError: null,
+        },
+        selectedFarm: user.role === 'farmer' && user.farmIds ? user.farmIds[0] : null,
+      }));
+      return true;
+    } else {
+      set(state => ({
+        auth: {
+          ...state.auth,
+          loginError: 'Invalid username or password',
+        }
+      }));
+      return false;
+    }
+  },
+
+  logout: () => {
+    set(state => ({
+      auth: {
+        isAuthenticated: false,
+        currentUser: null,
+        loginError: null,
+      },
+      selectedFarm: null,
+    }));
+  },
   
   setSelectedFarm: (farmId) => set({ selectedFarm: farmId }),
 

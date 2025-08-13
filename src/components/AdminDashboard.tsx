@@ -57,12 +57,16 @@ export const AdminDashboard = () => {
     soilData,
     weatherData,
     cropRules,
+    auth,
     updateCropRule,
     addCropRule,
     deleteCropRule,
     updateSoilData,
     generateWeatherData,
+    logout,
   } = useCropStore();
+
+  const currentUser = auth.currentUser;
 
   const [newRule, setNewRule] = React.useState({
     currentCrop: '',
@@ -197,7 +201,7 @@ export const AdminDashboard = () => {
                 CropCycle Admin
               </h1>
               <p className="text-muted-foreground mt-1">
-                Multicropping Management Dashboard
+                Welcome back, {currentUser?.name}
               </p>
             </div>
             <div className="flex items-center gap-3">
@@ -208,6 +212,9 @@ export const AdminDashboard = () => {
               <Button variant="crop" onClick={exportData} className="gap-2">
                 <Download className="h-4 w-4" />
                 Export Data
+              </Button>
+              <Button variant="ghost" onClick={logout}>
+                Logout
               </Button>
             </div>
           </div>

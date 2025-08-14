@@ -55,7 +55,7 @@ export const FarmMap = () => {
         <CardContent>
           <div className="relative">
             <MapContainer
-              center={[40.7128, -74.0060] as [number, number]}
+              center={[40.7128, -74.0060]}
               zoom={10}
               style={{ height: '400px', width: '100%' }}
               className="rounded-lg shadow-lg"
@@ -72,19 +72,21 @@ export const FarmMap = () => {
                 return (
                   <Marker
                     key={farmLocation.id}
-                    position={[farmLocation.lat, farmLocation.lng] as [number, number]}
+                    position={[farmLocation.lat, farmLocation.lng]}
                     icon={createCustomIcon(farmLocation.color)}
                   >
                     <Popup>
-                      <div className="p-3">
-                        <h3 className="font-bold text-sm mb-2">{farmLocation.name}</h3>
+                      <div>
+                        <h3 style={{ fontWeight: 'bold', fontSize: '14px', marginBottom: '8px' }}>
+                          {farmLocation.name}
+                        </h3>
                         {farm ? (
-                          <div className="space-y-1 text-xs">
+                          <div style={{ fontSize: '12px' }}>
                             <div><strong>Size:</strong> {farm.size} acres</div>
                             <div><strong>Soil:</strong> {farm.soilType}</div>
                             <div><strong>Crops:</strong> {farm.currentCrops.join(', ')}</div>
                             {soil && (
-                              <div className="mt-2 pt-2 border-t">
+                              <div style={{ marginTop: '8px', paddingTop: '8px', borderTop: '1px solid #ccc' }}>
                                 <div><strong>N:</strong> {soil.nitrogen}%</div>
                                 <div><strong>P:</strong> {soil.phosphorus}%</div>
                                 <div><strong>K:</strong> {soil.potassium}%</div>
@@ -93,7 +95,9 @@ export const FarmMap = () => {
                             )}
                           </div>
                         ) : (
-                          <div className="text-xs text-gray-500">No farm data available</div>
+                          <div style={{ fontSize: '12px', color: '#666' }}>
+                            No farm data available
+                          </div>
                         )}
                       </div>
                     </Popup>

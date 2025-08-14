@@ -19,13 +19,13 @@ export const FarmMap = () => {
   const mapInstanceRef = useRef<L.Map | null>(null);
   const { farms, soilData } = useCropStore();
 
-  // Dummy farm coordinates for demonstration
+  // Farm coordinates around Cagayan de Oro City, Philippines
   const farmLocations = [
-    { id: 'farm-1', name: 'Green Valley Farm', lat: 40.7128, lng: -74.0060, color: '#22c55e' },
-    { id: 'farm-2', name: 'Sunrise Agriculture', lat: 40.7589, lng: -73.9851, color: '#3b82f6' },
-    { id: 'farm-3', name: 'Golden Harvest', lat: 40.6892, lng: -74.0445, color: '#f59e0b' },
-    { id: 'farm-4', name: 'Peaceful Acres', lat: 40.7282, lng: -73.7949, color: '#8b5cf6' },
-    { id: 'farm-5', name: 'Organic Oasis', lat: 40.6782, lng: -73.9442, color: '#ef4444' },
+    { id: 'farm-1', name: 'Green Valley Farm', lat: 8.4542, lng: 124.6319, color: '#22c55e' },
+    { id: 'farm-2', name: 'Sunrise Agriculture', lat: 8.4712, lng: 124.6542, color: '#3b82f6' },
+    { id: 'farm-3', name: 'Golden Harvest', lat: 8.4328, lng: 124.6124, color: '#f59e0b' },
+    { id: 'farm-4', name: 'Peaceful Acres', lat: 8.4789, lng: 124.6701, color: '#8b5cf6' },
+    { id: 'farm-5', name: 'Organic Oasis', lat: 8.4401, lng: 124.5987, color: '#ef4444' },
   ];
 
   // Create custom icons for each farm
@@ -48,8 +48,8 @@ export const FarmMap = () => {
   useEffect(() => {
     if (!mapRef.current) return;
 
-    // Initialize map
-    const map = L.map(mapRef.current).setView([40.7128, -74.0060], 10);
+    // Initialize map centered on Cagayan de Oro City, Philippines
+    const map = L.map(mapRef.current).setView([8.4542, 124.6319], 12);
     mapInstanceRef.current = map;
 
     // Add tile layer

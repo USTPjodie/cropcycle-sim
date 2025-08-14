@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import React, { useEffect, useRef } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useCropStore } from '@/stores/cropStore';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { MapPin, Eye } from 'lucide-react';
+
 // Fix for default markers in Leaflet
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -15,6 +15,8 @@ L.Icon.Default.mergeOptions({
 });
 
 export const FarmMap = () => {
+  const mapRef = useRef<HTMLDivElement>(null);
+  const mapInstanceRef = useRef<L.Map | null>(null);
   const { farms, soilData } = useCropStore();
 
   // Dummy farm coordinates for demonstration
@@ -43,6 +45,60 @@ export const FarmMap = () => {
     });
   };
 
+  useEffect(() => {
+    if (!mapRef.current) return;
+
+    // Initialize map
+    const map = L.map(mapRef.current).setView([40.7128, -74.0060], 10);
+    mapInstanceRef.current = map;
+
+    // Add tile layer
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    // Add farm markers
+    farmLocations.forEach((farmLocation) => {
+      const farm = farms.find(f => f.name === farmLocation.name);
+      const soil = farm ? soilData[farm.id] : null;
+      
+      const popupContent = `
+        <div style="padding: 12px;">
+          <h3 style="font-weight: bold; font-size: 14px; margin-bottom: 8px; margin-top: 0;">
+            ${farmLocation.name}
+          </h3>
+          ${farm ? `
+            <div style="font-size: 12px;">
+              <div style="margin-bottom: 4px;"><strong>Size:</strong> ${farm.size} acres</div>
+              <div style="margin-bottom: 4px;"><strong>Soil:</strong> ${farm.soilType}</div>
+              <div style="margin-bottom: 4px;"><strong>Crops:</strong> ${farm.currentCrops.join(', ')}</div>
+              ${soil ? `
+                <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid #ccc;">
+                  <div style="margin-bottom: 2px;"><strong>N:</strong> ${soil.nitrogen}%</div>
+                  <div style="margin-bottom: 2px;"><strong>P:</strong> ${soil.phosphorus}%</div>
+                  <div style="margin-bottom: 2px;"><strong>K:</strong> ${soil.potassium}%</div>
+                  <div><strong>pH:</strong> ${soil.pH}</div>
+                </div>
+              ` : ''}
+            </div>
+          ` : '<div style="font-size: 12px; color: #666;">No farm data available</div>'}
+        </div>
+      `;
+
+      L.marker([farmLocation.lat, farmLocation.lng], {
+        icon: createCustomIcon(farmLocation.color)
+      }).addTo(map).bindPopup(popupContent);
+    });
+
+    // Cleanup function
+    return () => {
+      if (mapInstanceRef.current) {
+        mapInstanceRef.current.remove();
+        mapInstanceRef.current = null;
+      }
+    };
+  }, [farms, soilData]);
+
   return (
     <div className="space-y-6">
       <Card className="shadow-earth">
@@ -54,57 +110,11 @@ export const FarmMap = () => {
         </CardHeader>
         <CardContent>
           <div className="relative">
-            <MapContainer
-              center={[40.7128, -74.0060]}
-              zoom={10}
-              style={{ height: '400px', width: '100%' }}
-              className="rounded-lg shadow-lg"
-            >
-              <TileLayer
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-              />
-              
-              {farmLocations.map((farmLocation) => {
-                const farm = farms.find(f => f.name === farmLocation.name);
-                const soil = farm ? soilData[farm.id] : null;
-                
-                return (
-                  <Marker
-                    key={farmLocation.id}
-                    position={[farmLocation.lat, farmLocation.lng]}
-                    icon={createCustomIcon(farmLocation.color)}
-                  >
-                    <Popup>
-                      <div>
-                        <h3 style={{ fontWeight: 'bold', fontSize: '14px', marginBottom: '8px' }}>
-                          {farmLocation.name}
-                        </h3>
-                        {farm ? (
-                          <div style={{ fontSize: '12px' }}>
-                            <div><strong>Size:</strong> {farm.size} acres</div>
-                            <div><strong>Soil:</strong> {farm.soilType}</div>
-                            <div><strong>Crops:</strong> {farm.currentCrops.join(', ')}</div>
-                            {soil && (
-                              <div style={{ marginTop: '8px', paddingTop: '8px', borderTop: '1px solid #ccc' }}>
-                                <div><strong>N:</strong> {soil.nitrogen}%</div>
-                                <div><strong>P:</strong> {soil.phosphorus}%</div>
-                                <div><strong>K:</strong> {soil.potassium}%</div>
-                                <div><strong>pH:</strong> {soil.pH}</div>
-                              </div>
-                            )}
-                          </div>
-                        ) : (
-                          <div style={{ fontSize: '12px', color: '#666' }}>
-                            No farm data available
-                          </div>
-                        )}
-                      </div>
-                    </Popup>
-                  </Marker>
-                );
-              })}
-            </MapContainer>
+            <div 
+              ref={mapRef} 
+              className="w-full h-96 rounded-lg shadow-lg"
+              style={{ minHeight: '400px' }}
+            />
             
             <div className="absolute top-4 left-4 bg-card p-3 rounded-lg shadow-earth">
               <h4 className="font-medium text-sm mb-2">Legend</h4>
@@ -178,6 +188,7 @@ export const FarmMap = () => {
           </div>
         </CardContent>
       </Card>
+
       {/* Farm Statistics */}
       <Card className="shadow-earth">
         <CardHeader>

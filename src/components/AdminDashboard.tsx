@@ -37,6 +37,7 @@ import {
   Download,
   Database,
 } from 'lucide-react';
+import { FarmMap } from './FarmMap';
 
 ChartJS.register(
   CategoryScale,
@@ -282,8 +283,9 @@ export const AdminDashboard = () => {
       {/* Main Dashboard */}
       <div className="max-w-7xl mx-auto">
         <Tabs defaultValue="overview" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4 lg:w-auto lg:grid-cols-4">
+          <TabsList className="grid w-full grid-cols-5 lg:w-auto lg:grid-cols-5">
             <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="farms">Farms GIS</TabsTrigger>
             <TabsTrigger value="farmers">Farmers</TabsTrigger>
             <TabsTrigger value="rules">Crop Rules</TabsTrigger>
             <TabsTrigger value="data">Data Management</TabsTrigger>
@@ -347,6 +349,10 @@ export const AdminDashboard = () => {
                 </div>
               </CardContent>
             </Card>
+          </TabsContent>
+
+          <TabsContent value="farms" className="space-y-6">
+            <FarmMap />
           </TabsContent>
 
           <TabsContent value="farmers" className="space-y-6">

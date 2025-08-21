@@ -58,7 +58,7 @@ export const LoginPage = () => {
             <Sprout className="h-12 w-12 text-accent mr-3" />
             <div>
               <h1 className="text-4xl font-bold bg-gradient-crop bg-clip-text text-transparent">
-                CropCycle
+                CropWise
               </h1>
               <p className="text-lg text-muted-foreground">
                 Multicropping Assistant

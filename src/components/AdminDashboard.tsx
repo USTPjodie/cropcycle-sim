@@ -184,7 +184,7 @@ export const AdminDashboard = () => {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `cropcycle-data-${new Date().toISOString().split('T')[0]}.json`;
+    a.download = `cropwise-data-${new Date().toISOString().split('T')[0]}.json`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -199,7 +199,7 @@ export const AdminDashboard = () => {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold bg-gradient-crop bg-clip-text text-transparent">
-                CropCycle Admin
+                CropWise Admin
               </h1>
               <p className="text-muted-foreground mt-1">
                 Welcome back, {currentUser?.name}

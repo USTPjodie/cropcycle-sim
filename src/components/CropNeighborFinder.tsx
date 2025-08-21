@@ -1,0 +1,172 @@
+import React, { useState } from 'react';
+import { useCropStore } from '@/stores/cropStore';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
+import { Search, Users, AlertTriangle, Lightbulb } from 'lucide-react';
+
+export const CropNeighborFinder = () => {
+  const [inputCrop, setInputCrop] = useState('');
+  const [recommendation, setRecommendation] = useState(null);
+  const { getCropNeighborRecommendations } = useCropStore();
+
+  const handleSearch = () => {
+    if (!inputCrop.trim()) return;
+    
+    const result = getCropNeighborRecommendations(inputCrop);
+    setRecommendation(result);
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
+  };
+
+  return (
+    <div className="max-w-md mx-auto mb-6">
+      <Card className="shadow-earth">
+        <CardHeader className="pb-3">
+          <CardTitle className="text-lg flex items-center gap-2">
+            <Users className="h-5 w-5 text-accent" />
+            Crop Companion Finder
+          </CardTitle>
+          <CardDescription className="text-sm">
+            Find the best plant neighbors for multicropping success
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            {/* Search Input */}
+            <div className="flex gap-2">
+              <div className="flex-1 relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  placeholder="Enter crop name (e.g., tomato, beans, corn)"
+                  value={inputCrop}
+                  onChange={(e) => setInputCrop(e.target.value)}
+                  onKeyPress={handleKeyPress}
+                  className="pl-10"
+                />
+              </div>
+              <Button 
+                onClick={handleSearch}
+                disabled={!inputCrop.trim()}
+                variant="crop"
+                size="sm"
+              >
+                Find
+              </Button>
+            </div>
+
+            {/* Results */}
+            {recommendation === null && inputCrop && (
+              <div className="text-center py-4 text-muted-foreground">
+                <Search className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                <p className="text-sm">Click "Find" to get companion recommendations</p>
+              </div>
+            )}
+
+            {recommendation === null && !inputCrop && (
+              <div className="text-center py-4 text-muted-foreground">
+                <Lightbulb className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                <p className="text-sm">Enter a crop name to discover its ideal companions</p>
+                <p className="text-xs mt-1">Based on Philippine companion planting principles</p>
+              </div>
+            )}
+
+            {recommendation && (
+              <div className="space-y-4">
+                {/* Family Info */}
+                <div className="text-center">
+                  <Badge variant="outline" className="text-sm">
+                    {recommendation.familyInfo}
+                  </Badge>
+                </div>
+
+                <Separator />
+
+                {/* Good Neighbors */}
+                <div>
+                  <h4 className="font-medium text-sm mb-2 flex items-center gap-2 text-green-600">
+                    <Users className="h-4 w-4" />
+                    Good Neighbors ({recommendation.recommendedNeighbors.length})
+                  </h4>
+                  <div className="flex flex-wrap gap-1 mb-3">
+                    {recommendation.recommendedNeighbors.map((neighbor, index) => (
+                      <Badge key={index} variant="secondary" className="text-xs bg-green-50 text-green-700 hover:bg-green-100">
+                        ✓ {neighbor}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Bad Neighbors */}
+                {recommendation.avoidNeighbors.length > 0 && (
+                  <div>
+                    <h4 className="font-medium text-sm mb-2 flex items-center gap-2 text-red-600">
+                      <AlertTriangle className="h-4 w-4" />
+                      Avoid These ({recommendation.avoidNeighbors.length})
+                    </h4>
+                    <div className="flex flex-wrap gap-1 mb-3">
+                      {recommendation.avoidNeighbors.map((neighbor, index) => (
+                        <Badge key={index} variant="destructive" className="text-xs">
+                          ✗ {neighbor}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                <Separator />
+
+                {/* Benefits */}
+                <div>
+                  <h4 className="font-medium text-sm mb-2 flex items-center gap-2">
+                    <Lightbulb className="h-4 w-4 text-accent" />
+                    Multicropping Benefits
+                  </h4>
+                  <div className="space-y-1">
+                    {recommendation.benefits.map((benefit, index) => (
+                      <div key={index} className="text-xs text-muted-foreground flex items-start gap-2">
+                        <span className="text-accent mt-0.5">•</span>
+                        <span>{benefit}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Search Again */}
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="w-full"
+                  onClick={() => {
+                    setInputCrop('');
+                    setRecommendation(null);
+                  }}
+                >
+                  Search Another Crop
+                </Button>
+              </div>
+            )}
+
+            {recommendation === false && (
+              <div className="text-center py-4">
+                <AlertTriangle className="h-8 w-8 mx-auto mb-2 text-muted-foreground opacity-50" />
+                <p className="text-sm text-muted-foreground mb-2">
+                  No companion data found for "{inputCrop}"
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  Try searching for: tomato, beans, corn, lettuce, onion, cucumber, cabbage, etc.
+                </p>
+              </div>
+            )}
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+};

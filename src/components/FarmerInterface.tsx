@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
+import { CropNeighborFinder } from '@/components/CropNeighborFinder';
 import { 
   Sprout, 
   Calendar, 
@@ -258,6 +259,9 @@ export const FarmerInterface = () => {
                   </CardContent>
                 </Card>
               </div>
+
+              {/* Crop Companion Finder */}
+              <CropNeighborFinder />
 
               {/* Recommendations */}
               <div className="max-w-md mx-auto mb-6">

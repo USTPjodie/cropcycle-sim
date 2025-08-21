@@ -47,6 +47,23 @@ export interface CropRule {
   active: boolean;
 }
 
+export interface CompanionPlant {
+  family: string;
+  crops: string[];
+  goodNeighbors: string[];
+  badNeighbors: string[];
+  benefits: string[];
+  risks: string[];
+}
+
+export interface CropNeighborRecommendation {
+  inputCrop: string;
+  recommendedNeighbors: string[];
+  avoidNeighbors: string[];
+  benefits: string[];
+  familyInfo: string;
+}
+
 export interface Farmer {
   id: string;
   name: string;
@@ -79,6 +96,7 @@ interface CropStore {
   recommendations: CropRecommendation[];
   cropRules: CropRule[];
   selectedFarm: string | null;
+  companionPlants: CompanionPlant[];
   
   // Authentication
   auth: AuthState;
@@ -94,6 +112,7 @@ interface CropStore {
   deleteCropRule: (ruleId: string) => void;
   updateSoilData: (farmId: string) => void;
   generateWeatherData: () => void;
+  getCropNeighborRecommendations: (cropName: string) => CropNeighborRecommendation | null;
 }
 
 // Dummy data generators
@@ -238,6 +257,74 @@ const initialCropRules: CropRule[] = [
   },
 ];
 
+// Companion planting knowledge based on Philippine Allotment Garden Manual
+const companionPlantsData: CompanionPlant[] = [
+  {
+    family: 'Alliaceae',
+    crops: ['onion', 'garlic', 'leek', 'chives', 'shallot'],
+    goodNeighbors: ['tomato', 'eggplant', 'pepper', 'cabbage', 'pak choy', 'broccoli', 'cucumber', 'squash', 'lettuce', 'dill', 'parsley'],
+    badNeighbors: ['beans', 'peas', 'lentils', 'chickpeas'],
+    benefits: ['Pest control through biochemical repellents', 'Disease suppression', 'Aromatic protection'],
+    risks: ['May inhibit legume nitrogen fixation', 'Can stunt bean growth']
+  },
+  {
+    family: 'Asteraceae',
+    crops: ['lettuce', 'sunflower', 'calendula', 'marigold'],
+    goodNeighbors: ['beans', 'peas', 'cucumber', 'squash', 'onion', 'garlic', 'sweet corn', 'tomato', 'eggplant', 'basil'],
+    badNeighbors: [],
+    benefits: ['Attracts beneficial insects', 'Provides ground cover', 'Natural pest deterrent'],
+    risks: []
+  },
+  {
+    family: 'Crucifers/Brassicas',
+    crops: ['pak choy', 'cabbage', 'broccoli', 'cauliflower', 'mustard', 'radish', 'turnip'],
+    goodNeighbors: ['tomato', 'eggplant', 'pepper', 'onion', 'garlic', 'thyme', 'mint', 'rosemary', 'coriander'],
+    badNeighbors: ['tomato', 'eggplant', 'pepper', 'lettuce', 'sunflower'],
+    benefits: ['Natural pest control', 'Soil structure improvement', 'Quick growing ground cover'],
+    risks: ['Disease spread potential', 'Nutrient competition with some crops']
+  },
+  {
+    family: 'Cucurbits',
+    crops: ['bitter gourd', 'cucumber', 'bottle gourd', 'squash', 'pumpkin', 'zucchini', 'watermelon', 'melon'],
+    goodNeighbors: ['onion', 'garlic', 'beans', 'peas', 'carrot', 'celery', 'dill', 'lemon balm'],
+    badNeighbors: ['tomato', 'eggplant', 'pepper'],
+    benefits: ['Nitrogen fixation from legume companions', 'Natural pest control', 'Efficient space utilization'],
+    risks: ['Disease susceptibility with solanaceae', 'Competition for nutrients']
+  },
+  {
+    family: 'Fabaceae/Legumes',
+    crops: ['beans', 'peas', 'lentils', 'chickpeas', 'cowpeas', 'mung beans'],
+    goodNeighbors: ['cucumber', 'squash', 'lettuce', 'sweet corn', 'rosemary', 'coriander'],
+    badNeighbors: ['tomato', 'eggplant', 'pepper', 'onion', 'garlic'],
+    benefits: ['Nitrogen fixation', 'Soil improvement', 'Natural pest control'],
+    risks: ['Reduced nitrogen fixation near alliums', 'Disease spread potential']
+  },
+  {
+    family: 'Poaceae',
+    crops: ['sweet corn', 'rice', 'wheat', 'barley'],
+    goodNeighbors: ['beans', 'peas', 'cucumber', 'squash', 'lettuce', 'dill', 'amaranth'],
+    badNeighbors: ['tomato', 'eggplant', 'pepper', 'carrot', 'celery'],
+    benefits: ['Structural support for climbing plants', 'Wind protection', 'Efficient space use'],
+    risks: ['Heavy nutrient competition', 'Shading of smaller plants']
+  },
+  {
+    family: 'Solanaceae',
+    crops: ['tomato', 'eggplant', 'pepper', 'potato', 'chili'],
+    goodNeighbors: ['onion', 'garlic', 'beans', 'peas', 'cabbage', 'pak choy', 'basil', 'mint', 'oregano', 'lemon balm'],
+    badNeighbors: ['cabbage', 'pak choy', 'beans', 'peas', 'sweet corn', 'dill'],
+    benefits: ['Mutual pest protection with herbs', 'Enhanced flavor development', 'Disease resistance'],
+    risks: ['Disease spread within family', 'Nutrient competition', 'Pest attraction']
+  },
+  {
+    family: 'Apiaceae',
+    crops: ['carrot', 'celery', 'parsley', 'cilantro', 'fennel'],
+    goodNeighbors: ['onion', 'garlic', 'cabbage', 'pak choy', 'cucumber', 'squash'],
+    badNeighbors: ['sweet corn'],
+    benefits: ['Attracts beneficial insects', 'Deep soil penetration', 'Natural pest deterrent'],
+    risks: ['May compete with grasses for nutrients']
+  }
+];
+
 export const useCropStore = create<CropStore>((set, get) => ({
   // Initial state
   farms: initialFarms,
@@ -254,6 +341,7 @@ export const useCropStore = create<CropStore>((set, get) => ({
   weatherData: generateWeatherData(),
   recommendations: [],
   cropRules: initialCropRules,
+  companionPlants: companionPlantsData,
   selectedFarm: null,
 
   // Actions
@@ -372,5 +460,52 @@ export const useCropStore = create<CropStore>((set, get) => ({
 
   generateWeatherData: () => {
     set({ weatherData: generateWeatherData() });
+  },
+
+  getCropNeighborRecommendations: (cropName: string): CropNeighborRecommendation | null => {
+    const { companionPlants } = get();
+    const normalizedCrop = cropName.toLowerCase().trim();
+    
+    // Find the family this crop belongs to
+    let cropFamily = null;
+    let familyData = null;
+    
+    for (const family of companionPlants) {
+      if (family.crops.some(crop => crop.toLowerCase().includes(normalizedCrop) || normalizedCrop.includes(crop.toLowerCase()))) {
+        cropFamily = family.family;
+        familyData = family;
+        break;
+      }
+    }
+    
+    if (!familyData) {
+      // Try partial matching for common crop variations
+      for (const family of companionPlants) {
+        const cropVariations = [
+          normalizedCrop.replace(/s$/, ''), // remove plural
+          normalizedCrop + 's', // add plural
+          normalizedCrop.split(' ')[0], // first word only
+        ];
+        
+        for (const variation of cropVariations) {
+          if (family.crops.some(crop => crop.toLowerCase().includes(variation) || variation.includes(crop.toLowerCase()))) {
+            cropFamily = family.family;
+            familyData = family;
+            break;
+          }
+        }
+        if (familyData) break;
+      }
+    }
+    
+    if (!familyData) return null;
+    
+    return {
+      inputCrop: cropName,
+      recommendedNeighbors: familyData.goodNeighbors,
+      avoidNeighbors: familyData.badNeighbors,
+      benefits: familyData.benefits,
+      familyInfo: `${cropName} belongs to the ${cropFamily} family`
+    };
   },
 }));

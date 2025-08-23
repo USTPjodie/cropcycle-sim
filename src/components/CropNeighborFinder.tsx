@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useCropStore } from '@/stores/cropStore';
+import { CropImage } from '@/components/CropImage';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -94,11 +95,14 @@ export const CropNeighborFinder = () => {
                     <Users className="h-4 w-4" />
                     Good Neighbors ({recommendation.recommendedNeighbors.length})
                   </h4>
-                  <div className="flex flex-wrap gap-1 mb-3">
-                    {recommendation.recommendedNeighbors.map((neighbor, index) => (
-                      <Badge key={index} variant="secondary" className="text-xs bg-green-50 text-green-700 hover:bg-green-100">
-                        ✓ {neighbor}
-                      </Badge>
+                  <div className="grid grid-cols-1 gap-2">
+                    {recommendation.recommendedNeighbors.slice(0, 4).map((neighbor, index) => (
+                      <CropImage
+                        key={index}
+                        cropName={neighbor}
+                        showDetails
+                        className="hover:shadow-sm transition-shadow"
+                      />
                     ))}
                   </div>
                 </div>
@@ -110,11 +114,16 @@ export const CropNeighborFinder = () => {
                       <AlertTriangle className="h-4 w-4" />
                       Avoid These ({recommendation.avoidNeighbors.length})
                     </h4>
-                    <div className="flex flex-wrap gap-1 mb-3">
-                      {recommendation.avoidNeighbors.map((neighbor, index) => (
-                        <Badge key={index} variant="destructive" className="text-xs">
-                          ✗ {neighbor}
-                        </Badge>
+                    <div className="grid grid-cols-1 gap-2">
+                      {recommendation.avoidNeighbors.slice(0, 3).map((neighbor, index) => (
+                        <div key={index} className="flex items-center gap-3 p-2 rounded-lg border border-destructive/20 bg-destructive/5">
+                          <CropImage cropName={neighbor} size="sm" />
+                          <div className="flex-1">
+                            <p className="font-medium text-sm text-destructive">{neighbor}</p>
+                            <p className="text-xs text-muted-foreground">Avoid planting together</p>
+                          </div>
+                          <span className="text-destructive">⚠️</span>
+                        </div>
                       ))}
                     </div>
                   </div>

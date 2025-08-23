@@ -38,6 +38,13 @@ export interface CropRecommendation {
   benefits: string[];
 }
 
+export interface CropInfo {
+  name: string;
+  imageUrl: string;
+  category: string;
+  description: string;
+}
+
 export interface CropRule {
   id: string;
   currentCrop: string;
@@ -97,6 +104,7 @@ interface CropStore {
   cropRules: CropRule[];
   selectedFarm: string | null;
   companionPlants: CompanionPlant[];
+  cropDatabase: CropInfo[];
   
   // Authentication
   auth: AuthState;
@@ -113,6 +121,7 @@ interface CropStore {
   updateSoilData: (farmId: string) => void;
   generateWeatherData: () => void;
   getCropNeighborRecommendations: (cropName: string) => CropNeighborRecommendation | null;
+  getCropInfo: (cropName: string) => CropInfo | null;
 }
 
 // Dummy data generators
@@ -325,6 +334,29 @@ const companionPlantsData: CompanionPlant[] = [
   }
 ];
 
+// Comprehensive crop database with images
+const cropDatabase: CropInfo[] = [
+  { name: 'Rice', imageUrl: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=300&h=200&fit=crop', category: 'Grain', description: 'Staple grain crop requiring flooded fields' },
+  { name: 'Wheat', imageUrl: 'https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=300&h=200&fit=crop', category: 'Grain', description: 'Major cereal grain for bread and flour' },
+  { name: 'Corn', imageUrl: 'https://images.unsplash.com/photo-1551754655-cd27e38d2076?w=300&h=200&fit=crop', category: 'Grain', description: 'Versatile crop for food and animal feed' },
+  { name: 'Tomatoes', imageUrl: 'https://images.unsplash.com/photo-1546470427-e26264be0d75?w=300&h=200&fit=crop', category: 'Vegetable', description: 'Popular fruit vegetable rich in vitamins' },
+  { name: 'Cotton', imageUrl: 'https://images.unsplash.com/photo-1618172193622-ae2d025f4032?w=300&h=200&fit=crop', category: 'Fiber', description: 'Cash crop for textile production' },
+  { name: 'Sugarcane', imageUrl: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=300&h=200&fit=crop', category: 'Sugar', description: 'Tropical crop for sugar production' },
+  { name: 'Beans', imageUrl: 'https://images.unsplash.com/photo-1506976785307-8732e854ad03?w=300&h=200&fit=crop', category: 'Legume', description: 'Nitrogen-fixing protein-rich crop' },
+  { name: 'Onions', imageUrl: 'https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=300&h=200&fit=crop', category: 'Vegetable', description: 'Aromatic bulb vegetable' },
+  { name: 'Garlic', imageUrl: 'https://images.unsplash.com/photo-1471282809213-2bb3d5d8a6b7?w=300&h=200&fit=crop', category: 'Vegetable', description: 'Medicinal and culinary bulb crop' },
+  { name: 'Lettuce', imageUrl: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=300&h=200&fit=crop', category: 'Leafy Green', description: 'Cool-season salad crop' },
+  { name: 'Carrots', imageUrl: 'https://images.unsplash.com/photo-1447175008436-054170c2e979?w=300&h=200&fit=crop', category: 'Root Vegetable', description: 'Orange root vegetable rich in beta-carotene' },
+  { name: 'Celery', imageUrl: 'https://images.unsplash.com/photo-1551501058-8de3e6264ab4?w=300&h=200&fit=crop', category: 'Vegetable', description: 'Crunchy stem vegetable' },
+  { name: 'Pak Choy', imageUrl: 'https://images.unsplash.com/photo-1598170845058-32b9d6a5da37?w=300&h=200&fit=crop', category: 'Leafy Green', description: 'Asian leafy green vegetable' },
+  { name: 'Cabbage', imageUrl: 'https://images.unsplash.com/photo-1594282486753-0e3271b60905?w=300&h=200&fit=crop', category: 'Crucifer', description: 'Dense-headed brassica vegetable' },
+  { name: 'Cucumber', imageUrl: 'https://images.unsplash.com/photo-1519609792080-5f2b35e0f6b2?w=300&h=200&fit=crop', category: 'Cucurbit', description: 'Refreshing climbing vegetable' },
+  { name: 'Squash', imageUrl: 'https://images.unsplash.com/photo-1570586354348-0dc8bd3b1b78?w=300&h=200&fit=crop', category: 'Cucurbit', description: 'Versatile winter storage vegetable' },
+  { name: 'Eggplant', imageUrl: 'https://images.unsplash.com/photo-1615927783095-c2503648b1c0?w=300&h=200&fit=crop', category: 'Nightshade', description: 'Purple fruit vegetable' },
+  { name: 'Peppers', imageUrl: 'https://images.unsplash.com/photo-1563565375-f3fdfdbefa83?w=300&h=200&fit=crop', category: 'Nightshade', description: 'Spicy or sweet capsicum varieties' },
+  { name: 'Sweet Corn', imageUrl: 'https://images.unsplash.com/photo-1551754655-cd27e38d2076?w=300&h=200&fit=crop', category: 'Grain', description: 'Sweet variety of maize for direct consumption' }
+];
+
 export const useCropStore = create<CropStore>((set, get) => ({
   // Initial state
   farms: initialFarms,
@@ -342,6 +374,7 @@ export const useCropStore = create<CropStore>((set, get) => ({
   recommendations: [],
   cropRules: initialCropRules,
   companionPlants: companionPlantsData,
+  cropDatabase: cropDatabase,
   selectedFarm: null,
 
   // Actions
@@ -507,5 +540,12 @@ export const useCropStore = create<CropStore>((set, get) => ({
       benefits: familyData.benefits,
       familyInfo: `${cropName} belongs to the ${cropFamily} family`
     };
+  },
+
+  getCropInfo: (cropName: string): CropInfo | null => {
+    const { cropDatabase } = get();
+    return cropDatabase.find(crop => 
+      crop.name.toLowerCase() === cropName.toLowerCase()
+    ) || null;
   },
 }));

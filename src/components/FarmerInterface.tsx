@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { CropNeighborFinder } from '@/components/CropNeighborFinder';
+import { CropImage } from '@/components/CropImage';
 import { 
   Sprout, 
   Calendar, 
@@ -249,11 +250,14 @@ export const FarmerInterface = () => {
                     <CardTitle className="text-lg">Current Crops</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="flex flex-wrap gap-2">
+                    <div className="grid grid-cols-1 gap-3">
                       {currentFarm.currentCrops.map((crop, index) => (
-                        <Badge key={index} variant="secondary" className="text-sm">
-                          🌱 {crop}
-                        </Badge>
+                        <CropImage
+                          key={index}
+                          cropName={crop}
+                          showDetails
+                          className="hover:shadow-sm transition-shadow"
+                        />
                       ))}
                     </div>
                   </CardContent>

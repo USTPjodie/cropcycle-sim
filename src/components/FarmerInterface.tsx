@@ -128,7 +128,7 @@ export const FarmerInterface = () => {
                       <div className="flex-1">
                         <div className="font-medium">{farm.name}</div>
                         <div className="text-xs opacity-80">
-                          {farm.size} acres • {farm.soilType} soil
+                          {farm.size} hectares • {farm.soilType} soil
                         </div>
                         <div className="text-xs opacity-70">{farm.location}</div>
                       </div>

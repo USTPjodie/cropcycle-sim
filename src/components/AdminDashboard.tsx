@@ -387,7 +387,7 @@ export const AdminDashboard = () => {
                               const farm = farms.find(f => f.id === farmId);
                               return farm ? (
                                 <div key={farmId} className="text-xs">
-                                  {farm.name} ({farm.size} acres)
+                                  {farm.name} ({farm.size} hectares)
                                 </div>
                               ) : null;
                             })}

@@ -154,29 +154,29 @@ const generateWeatherData = (): WeatherData[] => {
 const initialFarms: Farm[] = [
   {
     id: 'farm-1',
-    name: 'Green Valley Farm',
-    size: 5,
+    name: 'Kalinawan Farm',
+    size: 2.5,
     soilType: 'clay',
-    currentCrops: ['Rice', 'Wheat'],
-    location: 'Punjab, India',
+    currentCrops: ['Rice', 'Corn'],
+    location: 'Cagayan de Oro City, Misamis Oriental',
     farmerId: 'farmer-1',
   },
   {
     id: 'farm-2',
-    name: 'Sunrise Acres',
-    size: 3,
+    name: 'Malasag Organic Farm',
+    size: 1.8,
     soilType: 'loam',
-    currentCrops: ['Tomatoes', 'Corn'],
-    location: 'Maharashtra, India',
+    currentCrops: ['Tomatoes', 'Sweet Corn'],
+    location: 'Malaybalay City, Bukidnon',
     farmerId: 'farmer-1',
   },
   {
     id: 'farm-3',
-    name: 'Golden Fields',
-    size: 8,
+    name: 'Golden Harvest Farm',
+    size: 4.2,
     soilType: 'sandy',
-    currentCrops: ['Cotton', 'Sugarcane'],
-    location: 'Gujarat, India',
+    currentCrops: ['Sugarcane', 'Beans'],
+    location: 'Valencia City, Bukidnon',
     farmerId: 'farmer-2',
   },
 ];
@@ -184,35 +184,35 @@ const initialFarms: Farm[] = [
 const initialFarmers: Farmer[] = [
   {
     id: 'farmer-1',
-    name: 'Raj Patel',
+    name: 'Juan Carlos Santos',
     farms: ['farm-1', 'farm-2'],
-    phone: '+91 98765 43210',
+    phone: '+63 917 123 4567',
     language: 'en',
   },
   {
     id: 'farmer-2',
-    name: 'Priya Sharma',
+    name: 'Maria Luz Villanueva',
     farms: ['farm-3'],
-    phone: '+91 87654 32109',
-    language: 'hi',
+    phone: '+63 928 765 4321',
+    language: 'en',
   },
 ];
 
 const initialUsers: User[] = [
   {
     id: 'user-1',
-    username: 'raj.farmer',
+    username: 'juan.farmer',
     password: 'farmer123',
     role: 'farmer',
-    name: 'Raj Patel',
+    name: 'Juan Carlos Santos',
     farmIds: ['farm-1', 'farm-2'],
   },
   {
     id: 'user-2',
-    username: 'priya.farmer',
-    password: 'farmer123',
+    username: 'maria.farmer',
+    password: 'farmer456',
     role: 'farmer',
-    name: 'Priya Sharma',
+    name: 'Maria Luz Villanueva',
     farmIds: ['farm-3'],
   },
   {
@@ -220,14 +220,7 @@ const initialUsers: User[] = [
     username: 'admin',
     password: 'admin123',
     role: 'admin',
-    name: 'Dr. Agricultural Expert',
-  },
-  {
-    id: 'admin-2',
-    username: 'supervisor',
-    password: 'super123',
-    role: 'admin',
-    name: 'Farm Supervisor',
+    name: 'Dr. Ricardo Aguilar',
   },
 ];
 

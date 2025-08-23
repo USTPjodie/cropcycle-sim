@@ -69,7 +69,7 @@ export const FarmMap = () => {
           </h3>
           ${farm ? `
             <div style="font-size: 12px;">
-              <div style="margin-bottom: 4px;"><strong>Size:</strong> ${farm.size} acres</div>
+              <div style="margin-bottom: 4px;"><strong>Size:</strong> ${farm.size} hectares</div>
               <div style="margin-bottom: 4px;"><strong>Soil:</strong> ${farm.soilType}</div>
               <div style="margin-bottom: 4px;"><strong>Crops:</strong> ${farm.currentCrops.join(', ')}</div>
               ${soil ? `
@@ -166,7 +166,7 @@ export const FarmMap = () => {
                   {farm && (
                     <div className="space-y-2">
                       <div className="flex items-center gap-2">
-                        <Badge variant="outline">{farm.size} acres</Badge>
+                        <Badge variant="outline">{farm.size} hectares</Badge>
                         <Badge variant="secondary">{farm.soilType}</Badge>
                       </div>
                       <div className="text-sm">
@@ -202,7 +202,7 @@ export const FarmMap = () => {
             <div className="bg-muted p-4 rounded-lg">
               <h4 className="font-medium mb-2">Total Area</h4>
               <p className="text-2xl font-bold text-primary">
-                {farms.reduce((total, farm) => total + farm.size, 0)} acres
+                {farms.reduce((total, farm) => total + farm.size, 0)} hectares
               </p>
             </div>
             <div className="bg-muted p-4 rounded-lg">

@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { translations } from '../translations';
 
 export interface Farm {
   id: string;
@@ -109,6 +110,10 @@ interface CropStore {
   // Authentication
   auth: AuthState;
   users: User[];
+  
+  // Language
+  language: 'en' | 'fil';
+  translations: Record<string, Record<string, string>>;
 
   // Actions
   login: (username: string, password: string) => boolean;
@@ -122,6 +127,8 @@ interface CropStore {
   generateWeatherData: () => void;
   getCropNeighborRecommendations: (cropName: string) => CropNeighborRecommendation | null;
   getCropInfo: (cropName: string) => CropInfo | null;
+  setLanguage: (language: 'en' | 'fil') => void;
+  t: (key: string) => string;
 }
 
 // Dummy data generators
@@ -369,6 +376,8 @@ export const useCropStore = create<CropStore>((set, get) => ({
   companionPlants: companionPlantsData,
   cropDatabase: cropDatabase,
   selectedFarm: null,
+  language: 'en' as 'en' | 'fil',
+  translations,
 
   // Actions
   login: (username, password) => {
@@ -540,5 +549,14 @@ export const useCropStore = create<CropStore>((set, get) => ({
     return cropDatabase.find(crop => 
       crop.name.toLowerCase() === cropName.toLowerCase()
     ) || null;
+  },
+
+  setLanguage: (language: 'en' | 'fil') => {
+    set({ language });
+  },
+
+  t: (key: string): string => {
+    const { language, translations } = get();
+    return translations[language]?.[key] || key;
   },
 }));

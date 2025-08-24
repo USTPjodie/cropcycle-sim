@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Sprout, User, Shield, Eye, EyeOff, AlertCircle } from 'lucide-react';
+import { LanguageSwitcher } from './LanguageSwitcher';
 
 export const LoginPage = () => {
   const [farmerCredentials, setFarmerCredentials] = useState({
@@ -23,7 +24,7 @@ export const LoginPage = () => {
   const [showAdminPassword, setShowAdminPassword] = useState(false);
   const [activeTab, setActiveTab] = useState('farmer');
 
-  const { login, auth } = useCropStore();
+  const { login, auth, t } = useCropStore();
 
   const handleFarmerLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -72,43 +73,46 @@ export const LoginPage = () => {
 
         <Card className="shadow-deep">
           <CardHeader className="text-center pb-4">
-            <CardTitle>Welcome Back</CardTitle>
+            <div className="flex justify-end mb-4">
+              <LanguageSwitcher />
+            </div>
+            <CardTitle>{t('loginTitle')}</CardTitle>
             <CardDescription>
-              Choose your role and sign in to continue
+              {t('loginSubtitle')}
             </CardDescription>
           </CardHeader>
-          <CardContent>
-            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="farmer" className="flex items-center gap-2">
-                  <User className="h-4 w-4" />
-                  Farmer
-                </TabsTrigger>
-                <TabsTrigger value="admin" className="flex items-center gap-2">
-                  <Shield className="h-4 w-4" />
-                  Admin
-                </TabsTrigger>
-              </TabsList>
+        <CardContent>
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="farmer" className="flex items-center gap-2">
+                <User className="h-4 w-4" />
+                {t('farmerTab')}
+              </TabsTrigger>
+              <TabsTrigger value="admin" className="flex items-center gap-2">
+                <Shield className="h-4 w-4" />
+                {t('adminTab')}
+              </TabsTrigger>
+            </TabsList>
 
               <TabsContent value="farmer" className="space-y-4 mt-6">
                 <form onSubmit={handleFarmerLogin} className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="farmer-username">Username</Label>
-                    <Input
-                      id="farmer-username"
-                      type="text"
-                      placeholder="Enter your username"
-                      value={farmerCredentials.username}
-                      onChange={(e) => setFarmerCredentials(prev => ({ 
-                        ...prev, 
-                        username: e.target.value 
-                      }))}
-                      required
-                    />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="farmer-password">Password</Label>
+                   <div className="space-y-2">
+                     <Label htmlFor="farmer-username">{t('username')}</Label>
+                     <Input
+                       id="farmer-username"
+                       type="text"
+                       placeholder="Enter your username"
+                       value={farmerCredentials.username}
+                       onChange={(e) => setFarmerCredentials(prev => ({ 
+                         ...prev, 
+                         username: e.target.value 
+                       }))}
+                       required
+                     />
+                   </div>
+                   
+                   <div className="space-y-2">
+                     <Label htmlFor="farmer-password">{t('password')}</Label>
                     <div className="relative">
                       <Input
                         id="farmer-password"
@@ -144,9 +148,9 @@ export const LoginPage = () => {
                     </Alert>
                   )}
 
-                  <Button type="submit" className="w-full" variant="crop" size="lg">
-                    Sign In as Farmer
-                  </Button>
+                   <Button type="submit" className="w-full" variant="crop" size="lg">
+                     {t('loginButton')} ({t('farmerTab')})
+                   </Button>
                 </form>
 
                 <div className="space-y-3">
@@ -155,7 +159,7 @@ export const LoginPage = () => {
                       <span className="w-full border-t" />
                     </div>
                     <div className="relative flex justify-center text-xs uppercase">
-                      <span className="bg-card px-2 text-muted-foreground">Demo Credentials</span>
+                     <span className="bg-card px-2 text-muted-foreground">{t('demoCredentials')}</span>
                     </div>
                   </div>
                   
@@ -178,23 +182,23 @@ export const LoginPage = () => {
 
               <TabsContent value="admin" className="space-y-4 mt-6">
                 <form onSubmit={handleAdminLogin} className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="admin-username">Username</Label>
-                    <Input
-                      id="admin-username"
-                      type="text"
-                      placeholder="Enter admin username"
-                      value={adminCredentials.username}
-                      onChange={(e) => setAdminCredentials(prev => ({ 
-                        ...prev, 
-                        username: e.target.value 
-                      }))}
-                      required
-                    />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="admin-password">Password</Label>
+                   <div className="space-y-2">
+                     <Label htmlFor="admin-username">{t('username')}</Label>
+                     <Input
+                       id="admin-username"
+                       type="text"
+                       placeholder="Enter admin username"
+                       value={adminCredentials.username}
+                       onChange={(e) => setAdminCredentials(prev => ({ 
+                         ...prev, 
+                         username: e.target.value 
+                       }))}
+                       required
+                     />
+                   </div>
+                   
+                   <div className="space-y-2">
+                     <Label htmlFor="admin-password">{t('password')}</Label>
                     <div className="relative">
                       <Input
                         id="admin-password"
@@ -230,9 +234,9 @@ export const LoginPage = () => {
                     </Alert>
                   )}
 
-                  <Button type="submit" className="w-full" variant="soil" size="lg">
-                    Sign In as Admin
-                  </Button>
+                   <Button type="submit" className="w-full" variant="soil" size="lg">
+                     {t('loginButton')} ({t('adminTab')})
+                   </Button>
                 </form>
 
                 <div className="space-y-3">
@@ -241,7 +245,7 @@ export const LoginPage = () => {
                       <span className="w-full border-t" />
                     </div>
                     <div className="relative flex justify-center text-xs uppercase">
-                      <span className="bg-card px-2 text-muted-foreground">Demo Credentials</span>
+                      <span className="bg-card px-2 text-muted-foreground">{t('demoCredentials')}</span>
                     </div>
                   </div>
                   

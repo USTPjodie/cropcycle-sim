@@ -11,7 +11,7 @@ import { Search, Users, AlertTriangle, Lightbulb } from 'lucide-react';
 export const CropNeighborFinder = () => {
   const [inputCrop, setInputCrop] = useState('');
   const [recommendation, setRecommendation] = useState(null);
-  const { getCropNeighborRecommendations } = useCropStore();
+  const { getCropNeighborRecommendations, t } = useCropStore();
 
   const handleSearch = () => {
     if (!inputCrop.trim()) return;

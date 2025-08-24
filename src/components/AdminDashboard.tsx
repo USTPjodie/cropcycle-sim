@@ -38,6 +38,7 @@ import {
   Database,
 } from 'lucide-react';
 import { FarmMap } from './FarmMap';
+import { LanguageSwitcher } from './LanguageSwitcher';
 
 ChartJS.register(
   CategoryScale,

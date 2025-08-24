@@ -32,6 +32,7 @@ export const translations = {
     currentCrops: 'Current Crops',
     recommendations: 'AI Recommendations',
     noRecommendations: 'No recommendations available for the selected farm.',
+    generateRecommendations: 'Generate Recommendations',
     
     // Soil Health
     nitrogen: 'Nitrogen',
@@ -43,6 +44,7 @@ export const translations = {
     good: 'Good',
     fair: 'Fair',
     poor: 'Poor',
+    organicMatter: 'Organic Matter',
     
     // Weather
     temperature: 'Temperature',
@@ -51,6 +53,11 @@ export const translations = {
     rainy: 'Rainy',
     cloudy: 'Cloudy',
     partlyCloudy: 'Partly Cloudy',
+    today: 'Today',
+    tomorrow: 'Tomorrow',
+    wednesday: 'Wednesday',
+    thursday: 'Thursday',
+    friday: 'Friday',
     
     // Recommendations
     urgencyHigh: 'High',
@@ -63,6 +70,7 @@ export const translations = {
     setReminder: 'Set Reminder',
     learnMore: 'Learn More',
     listen: 'Listen',
+    urgency: 'Urgency',
     
     // Crop Types
     rotation: 'Crop Rotation',
@@ -80,6 +88,36 @@ export const translations = {
     farmers: 'Farmers',
     cropRules: 'Crop Rules',
     dataManagement: 'Data Management',
+    soilHealthTrends: 'Soil Health Trends Over Time',
+    farmSoilDistribution: 'Farm Soil Distribution',
+    currentWeather: 'Current Weather Conditions',
+    welcomeAdmin: 'Welcome to the Admin Dashboard',
+    manageCrops: 'Manage your agricultural data and monitor farm performance',
+    
+    // Farmer Management
+    farmerName: 'Farmer Name',
+    assignedFarms: 'Assigned Farms',
+    phone: 'Phone',
+    language: 'Language',
+    
+    // Crop Rules Management
+    addNewRule: 'Add New Crop Rule',
+    currentCrop: 'Current Crop',
+    recommendedCrop: 'Recommended Crop',
+    condition: 'Condition',
+    active: 'Active',
+    actions: 'Actions',
+    
+    // Data Management
+    realTimeSoilData: 'Real-time Soil Data',
+    farmName: 'Farm Name',
+    size: 'Size',
+    soilType: 'Soil Type',
+    location: 'Location',
+    systemInfo: 'System Information',
+    dataSource: 'Data Source',
+    lastSync: 'Last Sync',
+    status: 'Status',
     
     // Units
     hectares: 'hectares',
@@ -97,6 +135,12 @@ export const translations = {
     // Farm Map
     farmLocations: 'Farm Locations',
     
+    // Soil Types
+    clay: 'Clay',
+    loam: 'Loam',
+    sandy: 'Sandy',
+    silt: 'Silt',
+    
     // Common
     loading: 'Loading...',
     error: 'Error',
@@ -106,7 +150,15 @@ export const translations = {
     delete: 'Delete',
     edit: 'Edit',
     add: 'Add',
-    update: 'Update'
+    update: 'Update',
+    close: 'Close',
+    confirm: 'Confirm',
+    
+    // Demo credentials
+    demoFarmerUsername: 'juan.farmer',
+    demoFarmerPassword: 'farmer123',
+    demoAdminUsername: 'admin',
+    demoAdminPassword: 'admin123'
   },
   
   fil: {
@@ -116,7 +168,7 @@ export const translations = {
     
     // Login Page
     loginTitle: 'Maligayang pagdating sa CropWise',
-    loginSubtitle: 'Ang inyong katalinuhang kasosyo para sa sustainable na multicropping',
+    loginSubtitle: 'Ang inyong matalinong kasosyo para sa sustainable na multicropping',
     farmerTab: 'Magsasaka',
     adminTab: 'Admin',
     username: 'Username',
@@ -137,11 +189,12 @@ export const translations = {
     welcomeMessage: 'Maligayang pagdating',
     noFarms: 'Wala kayong nakatalagang mga sakahan. Makipag-ugnayan sa inyong administrator.',
     myFarms: 'Aking mga Sakahan',
-    weatherForecast: 'Lagay ng Panahon',
+    weatherForecast: 'Hula sa Panahon',
     soilHealth: 'Kalusugan ng Lupa',
     currentCrops: 'Kasalukuyang mga Pananim',
     recommendations: 'AI na mga Rekomendasyon',
     noRecommendations: 'Walang available na rekomendasyon para sa napiling sakahan.',
+    generateRecommendations: 'Bumuo ng mga Rekomendasyon',
     
     // Soil Health
     nitrogen: 'Nitrogen',
@@ -153,6 +206,7 @@ export const translations = {
     good: 'Mabuti',
     fair: 'Katamtaman',
     poor: 'Mahina',
+    organicMatter: 'Organic Matter',
     
     // Weather
     temperature: 'Temperatura',
@@ -161,6 +215,11 @@ export const translations = {
     rainy: 'Maulan',
     cloudy: 'Maulap',
     partlyCloudy: 'Bahagyang Maulap',
+    today: 'Ngayon',
+    tomorrow: 'Bukas',
+    wednesday: 'Miyerkules',
+    thursday: 'Huwebes',
+    friday: 'Biyernes',
     
     // Recommendations
     urgencyHigh: 'Mataas',
@@ -170,9 +229,10 @@ export const translations = {
     reason: 'Dahilan',
     benefits: 'Mga Benepisyo',
     nextPlanting: 'Susunod na Pagtatanim',
-    setReminder: 'Mag-set ng Reminder',
+    setReminder: 'Mag-set ng Paalala',
     learnMore: 'Matuto pa',
     listen: 'Makinig',
+    urgency: 'Pagkakagipit',
     
     // Crop Types
     rotation: 'Pag-ikot ng Pananim',
@@ -183,13 +243,43 @@ export const translations = {
     adminDashboard: 'Admin Dashboard',
     totalFarms: 'Kabuuang Sakahan',
     activeFarmers: 'Aktibong Magsasaka',
-    activeCropRules: 'Aktibong Crop Rules',
+    activeCropRules: 'Aktibong Patakaran ng Pananim',
     avgSoilHealth: 'Average na Kalusugan ng Lupa',
     overview: 'Pangkalahatang Tingin',
     farmsGis: 'GIS ng mga Sakahan',
     farmers: 'Mga Magsasaka',
     cropRules: 'Mga Patakaran ng Pananim',
     dataManagement: 'Pamamahala ng Data',
+    soilHealthTrends: 'Trends ng Kalusugan ng Lupa sa Paglipas ng Panahon',
+    farmSoilDistribution: 'Pamamahagi ng Lupa sa mga Sakahan',
+    currentWeather: 'Kasalukuyang Kondisyon ng Panahon',
+    welcomeAdmin: 'Maligayang pagdating sa Admin Dashboard',
+    manageCrops: 'Pamahalaan ang inyong agricultural data at subaybayan ang performance ng sakahan',
+    
+    // Farmer Management
+    farmerName: 'Pangalan ng Magsasaka',
+    assignedFarms: 'Nakatalagang mga Sakahan',
+    phone: 'Telepono',
+    language: 'Wika',
+    
+    // Crop Rules Management
+    addNewRule: 'Magdagdag ng Bagong Patakaran ng Pananim',
+    currentCrop: 'Kasalukuyang Pananim',
+    recommendedCrop: 'Inirerekomendang Pananim',
+    condition: 'Kondisyon',
+    active: 'Aktibo',
+    actions: 'Mga Aksyon',
+    
+    // Data Management
+    realTimeSoilData: 'Real-time na Data ng Lupa',
+    farmName: 'Pangalan ng Sakahan',
+    size: 'Laki',
+    soilType: 'Uri ng Lupa',
+    location: 'Lokasyon',
+    systemInfo: 'Impormasyon ng Sistema',
+    dataSource: 'Pinagkunan ng Data',
+    lastSync: 'Huling Sync',
+    status: 'Estado',
     
     // Units
     hectares: 'ektarya',
@@ -207,15 +297,29 @@ export const translations = {
     // Farm Map
     farmLocations: 'Mga Lokasyon ng Sakahan',
     
+    // Soil Types
+    clay: 'Luad',
+    loam: 'Loam',
+    sandy: 'Buhangin',
+    silt: 'Silt',
+    
     // Common
     loading: 'Naglo-load...',
-    error: 'Error',
+    error: 'Mali',
     success: 'Tagumpay',
     cancel: 'Kanselahin',
     save: 'I-save',
     delete: 'Tanggalin',
     edit: 'I-edit',
     add: 'Idagdag',
-    update: 'I-update'
+    update: 'I-update',
+    close: 'Isara',
+    confirm: 'Kumpirmahin',
+    
+    // Demo credentials
+    demoFarmerUsername: 'juan.farmer',
+    demoFarmerPassword: 'farmer123',
+    demoAdminUsername: 'admin',
+    demoAdminPassword: 'admin123'
   }
 };

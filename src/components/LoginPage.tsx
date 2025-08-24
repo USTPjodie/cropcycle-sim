@@ -39,13 +39,13 @@ export const LoginPage = () => {
   const fillDemoCredentials = (role: 'farmer' | 'admin') => {
     if (role === 'farmer') {
       setFarmerCredentials({
-        username: 'raj.farmer',
-        password: 'farmer123',
+        username: t('demoFarmerUsername'),
+        password: t('demoFarmerPassword'),
       });
     } else {
       setAdminCredentials({
-        username: 'admin',
-        password: 'admin123',
+        username: t('demoAdminUsername'),
+        password: t('demoAdminPassword'),
       });
     }
   };
@@ -142,10 +142,10 @@ export const LoginPage = () => {
                   </div>
 
                   {auth.loginError && (
-                    <Alert variant="destructive">
-                      <AlertCircle className="h-4 w-4" />
-                      <AlertDescription>{auth.loginError}</AlertDescription>
-                    </Alert>
+                     <Alert variant="destructive">
+                       <AlertCircle className="h-4 w-4" />
+                       <AlertDescription>{auth.loginError === 'Invalid username or password' ? t('invalidCredentials') : auth.loginError}</AlertDescription>
+                     </Alert>
                   )}
 
                    <Button type="submit" className="w-full" variant="crop" size="lg">
@@ -228,10 +228,10 @@ export const LoginPage = () => {
                   </div>
 
                   {auth.loginError && (
-                    <Alert variant="destructive">
-                      <AlertCircle className="h-4 w-4" />
-                      <AlertDescription>{auth.loginError}</AlertDescription>
-                    </Alert>
+                     <Alert variant="destructive">
+                       <AlertCircle className="h-4 w-4" />
+                       <AlertDescription>{auth.loginError === 'Invalid username or password' ? t('invalidCredentials') : auth.loginError}</AlertDescription>
+                     </Alert>
                   )}
 
                    <Button type="submit" className="w-full" variant="soil" size="lg">

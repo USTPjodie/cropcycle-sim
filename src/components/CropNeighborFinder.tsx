@@ -32,10 +32,10 @@ export const CropNeighborFinder = () => {
         <CardHeader className="pb-3">
           <CardTitle className="text-lg flex items-center gap-2">
             <Users className="h-5 w-5 text-accent" />
-            Crop Companion Finder
+            {t('multicroppingAI')}
           </CardTitle>
           <CardDescription className="text-sm">
-            Find the best plant neighbors for multicropping success
+            {t('selectCrop')}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -45,35 +45,35 @@ export const CropNeighborFinder = () => {
               <div className="flex-1 relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
-                  placeholder="Enter crop name (e.g., tomato, beans, corn)"
+                  placeholder={`${t('selectCrop')} (${t('tomato')}, ${t('beans')}, ${t('corn')})`}
                   value={inputCrop}
                   onChange={(e) => setInputCrop(e.target.value)}
                   onKeyPress={handleKeyPress}
                   className="pl-10"
                 />
               </div>
-              <Button 
-                onClick={handleSearch}
-                disabled={!inputCrop.trim()}
-                variant="crop"
-                size="sm"
-              >
-                Find
-              </Button>
+                <Button 
+                  onClick={handleSearch}
+                  disabled={!inputCrop.trim()}
+                  variant="crop"
+                  size="sm"
+                >
+                  {t('findCompatible')}
+                </Button>
             </div>
 
             {/* Results */}
             {recommendation === null && inputCrop && (
               <div className="text-center py-4 text-muted-foreground">
                 <Search className="h-8 w-8 mx-auto mb-2 opacity-50" />
-                <p className="text-sm">Click "Find" to get companion recommendations</p>
+                <p className="text-sm">Click "{t('findCompatible')}" to get companion recommendations</p>
               </div>
             )}
 
             {recommendation === null && !inputCrop && (
               <div className="text-center py-4 text-muted-foreground">
                 <Lightbulb className="h-8 w-8 mx-auto mb-2 opacity-50" />
-                <p className="text-sm">Enter a crop name to discover its ideal companions</p>
+                <p className="text-sm">{t('selectCrop')}</p>
                 <p className="text-xs mt-1">Based on Philippine companion planting principles</p>
               </div>
             )}
@@ -93,7 +93,7 @@ export const CropNeighborFinder = () => {
                 <div>
                   <h4 className="font-medium text-sm mb-2 flex items-center gap-2 text-green-600">
                     <Users className="h-4 w-4" />
-                    Good Neighbors ({recommendation.recommendedNeighbors.length})
+                    {t('goodNeighbors')} ({recommendation.recommendedNeighbors.length})
                   </h4>
                   <div className="grid grid-cols-1 gap-2">
                     {recommendation.recommendedNeighbors.slice(0, 4).map((neighbor, index) => (
@@ -112,14 +112,14 @@ export const CropNeighborFinder = () => {
                   <div>
                     <h4 className="font-medium text-sm mb-2 flex items-center gap-2 text-red-600">
                       <AlertTriangle className="h-4 w-4" />
-                      Avoid These ({recommendation.avoidNeighbors.length})
+                      {t('avoidNeighbors')} ({recommendation.avoidNeighbors.length})
                     </h4>
                     <div className="grid grid-cols-1 gap-2">
                       {recommendation.avoidNeighbors.slice(0, 3).map((neighbor, index) => (
                         <div key={index} className="flex items-center gap-3 p-2 rounded-lg border border-destructive/20 bg-destructive/5">
                           <CropImage cropName={neighbor} size="sm" />
                           <div className="flex-1">
-                            <p className="font-medium text-sm text-destructive">{neighbor}</p>
+                            <p className="font-medium text-sm text-destructive">{t(neighbor.toLowerCase()) || neighbor}</p>
                             <p className="text-xs text-muted-foreground">Avoid planting together</p>
                           </div>
                           <span className="text-destructive">⚠️</span>
@@ -135,7 +135,7 @@ export const CropNeighborFinder = () => {
                 <div>
                   <h4 className="font-medium text-sm mb-2 flex items-center gap-2">
                     <Lightbulb className="h-4 w-4 text-accent" />
-                    Multicropping Benefits
+                    {t('neighborBenefits')}
                   </h4>
                   <div className="space-y-1">
                     {recommendation.benefits.map((benefit, index) => (
@@ -157,7 +157,7 @@ export const CropNeighborFinder = () => {
                     setRecommendation(null);
                   }}
                 >
-                  Search Another Crop
+                  {t('selectCrop')}
                 </Button>
               </div>
             )}
@@ -169,7 +169,7 @@ export const CropNeighborFinder = () => {
                   No companion data found for "{inputCrop}"
                 </p>
                 <p className="text-xs text-muted-foreground">
-                  Try searching for: tomato, beans, corn, lettuce, onion, cucumber, cabbage, etc.
+                  Try searching for: {t('tomato')}, {t('beans')}, {t('corn')}, {t('lettuce')}, {t('onion')}, {t('cucumber')}, {t('cabbage')}, etc.
                 </p>
               </div>
             )}

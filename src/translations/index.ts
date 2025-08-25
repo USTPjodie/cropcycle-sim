@@ -124,13 +124,35 @@ export const translations = {
     celsius: '°C',
     percent: '%',
     
-    // Crop Neighbor Finder
-    cropNeighborFinder: 'Crop Neighbor Finder',
+    // Multicropping AI
+    multicroppingAI: 'Multicropping AI',
     selectCrop: 'Select a crop to find compatible neighbors',
     goodNeighbors: 'Good Neighbors',
     avoidNeighbors: 'Avoid These',
     findCompatible: 'Find Compatible Crops',
     neighborBenefits: 'Benefits',
+    
+    // Crop Names (English)
+    tomato: 'Tomato',
+    beans: 'Beans',
+    corn: 'Corn',
+    lettuce: 'Lettuce',
+    onion: 'Onion',
+    cucumber: 'Cucumber',
+    cabbage: 'Cabbage',
+    carrots: 'Carrots',
+    basil: 'Basil',
+    marigold: 'Marigold',
+    spinach: 'Spinach',
+    radish: 'Radish',
+    peas: 'Peas',
+    garlic: 'Garlic',
+    peppers: 'Peppers',
+    squash: 'Squash',
+    broccoli: 'Broccoli',
+    kale: 'Kale',
+    eggplant: 'Eggplant',
+    okra: 'Okra',
     
     // Farm Map
     farmLocations: 'Farm Locations',
@@ -286,13 +308,35 @@ export const translations = {
     celsius: '°C',
     percent: '%',
     
-    // Crop Neighbor Finder
-    cropNeighborFinder: 'Crop Neighbor Finder',
+    // Multicropping AI
+    multicroppingAI: 'Multicropping AI',
     selectCrop: 'Pumili ng pananim upang makita ang mga compatible na kapitbahay',
     goodNeighbors: 'Mabubuting Kapitbahay',
     avoidNeighbors: 'Iwasang mga Ito',
     findCompatible: 'Hanapin ang Compatible na mga Pananim',
     neighborBenefits: 'Mga Benepisyo',
+    
+    // Crop Names (Filipino)
+    tomato: 'Kamatis',
+    beans: 'Sitaw',
+    corn: 'Mais',
+    lettuce: 'Lettuce',
+    onion: 'Sibuyas',
+    cucumber: 'Pipino',
+    cabbage: 'Repolyo',
+    carrots: 'Karot',
+    basil: 'Balanoy',
+    marigold: 'Marigold',
+    spinach: 'Alugbati',
+    radish: 'Labanos',
+    peas: 'Gisantes',
+    garlic: 'Bawang',
+    peppers: 'Sili',
+    squash: 'Kalabasa',
+    broccoli: 'Broccoli',
+    kale: 'Kale',
+    eggplant: 'Talong',
+    okra: 'Okra',
     
     // Farm Map
     farmLocations: 'Mga Lokasyon ng Sakahan',

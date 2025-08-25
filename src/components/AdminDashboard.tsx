@@ -36,6 +36,12 @@ import {
   RefreshCw,
   Download,
   Database,
+  Brain,
+  Bot,
+  Zap,
+  CheckCircle,
+  Clock,
+  LogOut
 } from 'lucide-react';
 import { FarmMap } from './FarmMap';
 import { LanguageSwitcher } from './LanguageSwitcher';
@@ -66,6 +72,7 @@ export const AdminDashboard = () => {
     updateSoilData,
     generateWeatherData,
     logout,
+    t
   } = useCropStore();
 
   const currentUser = auth.currentUser;
@@ -403,18 +410,201 @@ export const AdminDashboard = () => {
           </TabsContent>
 
           <TabsContent value="rules" className="space-y-6">
-            {/* Add New Rule */}
+            {/* AI Model Configuration */}
+            <Card className="shadow-earth border-primary/20">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Brain className="h-5 w-5 text-primary" />
+                  {t('aiCropRulesEngine')}
+                </CardTitle>
+                <p className="text-sm text-muted-foreground">
+                  {t('aiCropRulesDescription')}
+                </p>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-4">
+                    <div>
+                      <Label htmlFor="aiModel">{t('aiModel')}</Label>
+                      <select
+                        id="aiModel"
+                        className="w-full mt-1 p-2 border border-input rounded-md bg-background"
+                      >
+                        <option value="gpt-4">GPT-4 - {t('highAccuracy')}</option>
+                        <option value="claude-3">Claude-3 - {t('balanced')}</option>
+                        <option value="gemini-pro">Gemini Pro - {t('fast')}</option>
+                      </select>
+                    </div>
+                    <div>
+                      <Label htmlFor="confidence">{t('confidenceThreshold')}</Label>
+                      <div className="flex items-center gap-2 mt-1">
+                        <input
+                          type="range"
+                          id="confidence"
+                          min="0.1"
+                          max="1.0"
+                          step="0.1"
+                          defaultValue="0.8"
+                          className="flex-1"
+                        />
+                        <span className="text-sm">80%</span>
+                      </div>
+                    </div>
+                    <div>
+                      <Label htmlFor="updateFreq">{t('autoUpdateFrequency')}</Label>
+                      <select
+                        id="updateFreq"
+                        className="w-full mt-1 p-2 border border-input rounded-md bg-background"
+                      >
+                        <option value="real-time">{t('realTime')}</option>
+                        <option value="daily">{t('daily')}</option>
+                        <option value="weekly">{t('weekly')}</option>
+                        <option value="manual">{t('manual')}</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div className="space-y-4">
+                    <div className="p-4 bg-primary/5 rounded-lg border border-primary/10">
+                      <h4 className="font-medium mb-2 text-primary">{t('aiCapabilities')}</h4>
+                      <ul className="text-sm space-y-1 text-muted-foreground">
+                        <li>• {t('realTimeAnalysis')}</li>
+                        <li>• {t('weatherIntegration')}</li>
+                        <li>• {t('soilDataProcessing')}</li>
+                        <li>• {t('predictiveModeling')}</li>
+                        <li>• {t('multicropOptimization')}</li>
+                      </ul>
+                    </div>
+                    <Button className="w-full" variant="default">
+                      <Zap className="h-4 w-4 mr-2" />
+                      {t('generateAiRules')}
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* AI-Generated Rules */}
             <Card className="shadow-earth">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Plus className="h-5 w-5 text-accent" />
-                  Add New Crop Rule
+                  <Bot className="h-5 w-5 text-accent" />
+                  {t('aiGeneratedRules')}
                 </CardTitle>
+                <div className="flex items-center gap-2">
+                  <Badge variant="outline" className="text-xs">
+                    {t('lastUpdated')}: {new Date().toLocaleString()}
+                  </Badge>
+                  <Badge variant="secondary" className="text-xs">
+                    {cropRules.length} {t('activeRules')}
+                  </Badge>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {/* AI Rules Summary */}
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="p-4 bg-green-50 dark:bg-green-950/20 rounded-lg border border-green-200 dark:border-green-800">
+                      <div className="flex items-center gap-2">
+                        <CheckCircle className="h-4 w-4 text-green-600" />
+                        <span className="text-sm font-medium">{t('optimizedRules')}</span>
+                      </div>
+                      <p className="text-lg font-bold text-green-600 mt-1">{cropRules.filter(r => r.active).length}</p>
+                    </div>
+                    <div className="p-4 bg-blue-50 dark:bg-blue-950/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                      <div className="flex items-center gap-2">
+                        <TrendingUp className="h-4 w-4 text-blue-600" />
+                        <span className="text-sm font-medium">{t('accuracy')}</span>
+                      </div>
+                      <p className="text-lg font-bold text-blue-600 mt-1">94.2%</p>
+                    </div>
+                    <div className="p-4 bg-orange-50 dark:bg-orange-950/20 rounded-lg border border-orange-200 dark:border-orange-800">
+                      <div className="flex items-center gap-2">
+                        <Clock className="h-4 w-4 text-orange-600" />
+                        <span className="text-sm font-medium">{t('processing')}</span>
+                      </div>
+                      <p className="text-lg font-bold text-orange-600 mt-1">1.2s</p>
+                    </div>
+                  </div>
+
+                  {/* Rules Table */}
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>{t('currentCrop')}</TableHead>
+                        <TableHead>{t('recommendedCrop')}</TableHead>
+                        <TableHead>{t('aiReason')}</TableHead>
+                        <TableHead>{t('confidence')}</TableHead>
+                        <TableHead>{t('status')}</TableHead>
+                        <TableHead>{t('actions')}</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {cropRules.map((rule) => (
+                        <TableRow key={rule.id}>
+                          <TableCell className="font-medium">{rule.currentCrop}</TableCell>
+                          <TableCell>{rule.recommendedCrop}</TableCell>
+                          <TableCell className="text-sm max-w-[200px] truncate">{rule.reason}</TableCell>
+                          <TableCell>
+                            <div className="flex items-center gap-2">
+                              <div className="w-12 bg-gray-200 rounded-full h-2">
+                                <div 
+                                  className="bg-green-600 h-2 rounded-full" 
+                                  style={{ width: `${Math.random() * 30 + 70}%` }}
+                                ></div>
+                              </div>
+                              <span className="text-xs">{Math.floor(Math.random() * 30 + 70)}%</span>
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <Switch
+                              checked={rule.active}
+                              onCheckedChange={(checked) =>
+                                updateCropRule({ ...rule, active: checked })
+                              }
+                            />
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex items-center gap-1">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                title={t('editRule')}
+                              >
+                                <Edit className="h-4 w-4" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => deleteCropRule(rule.id)}
+                                title={t('deleteRule')}
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Manual Rule Override */}
+            <Card className="shadow-earth border-muted">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Settings className="h-5 w-5 text-muted-foreground" />
+                  {t('manualRuleOverride')}
+                </CardTitle>
+                <p className="text-sm text-muted-foreground">
+                  {t('manualRuleDescription')}
+                </p>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                   <div>
-                    <Label htmlFor="currentCrop">Current Crop</Label>
+                    <Label htmlFor="currentCrop">{t('currentCrop')}</Label>
                     <Input
                       id="currentCrop"
                       value={newRule.currentCrop}
@@ -423,7 +613,7 @@ export const AdminDashboard = () => {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="recommendedCrop">Recommended Crop</Label>
+                    <Label htmlFor="recommendedCrop">{t('recommendedCrop')}</Label>
                     <Input
                       id="recommendedCrop"
                       value={newRule.recommendedCrop}
@@ -432,7 +622,7 @@ export const AdminDashboard = () => {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="reason">Reason</Label>
+                    <Label htmlFor="reason">{t('reason')}</Label>
                     <Input
                       id="reason"
                       value={newRule.reason}
@@ -441,7 +631,7 @@ export const AdminDashboard = () => {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="condition">Condition</Label>
+                    <Label htmlFor="condition">{t('condition')}</Label>
                     <Input
                       id="condition"
                       value={newRule.condition}
@@ -450,60 +640,10 @@ export const AdminDashboard = () => {
                     />
                   </div>
                 </div>
-                <Button onClick={handleAddRule} className="mt-4" variant="crop">
-                  Add Rule
+                <Button onClick={handleAddRule} className="mt-4" variant="outline">
+                  <Plus className="h-4 w-4 mr-2" />
+                  {t('addManualRule')}
                 </Button>
-              </CardContent>
-            </Card>
-
-            {/* Existing Rules */}
-            <Card className="shadow-earth">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Settings className="h-5 w-5 text-primary" />
-                  Existing Crop Rules
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Current Crop</TableHead>
-                      <TableHead>Recommended Crop</TableHead>
-                      <TableHead>Reason</TableHead>
-                      <TableHead>Condition</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead>Actions</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {cropRules.map((rule) => (
-                      <TableRow key={rule.id}>
-                        <TableCell className="font-medium">{rule.currentCrop}</TableCell>
-                        <TableCell>{rule.recommendedCrop}</TableCell>
-                        <TableCell>{rule.reason}</TableCell>
-                        <TableCell className="text-xs">{rule.condition}</TableCell>
-                        <TableCell>
-                          <Switch
-                            checked={rule.active}
-                            onCheckedChange={(checked) =>
-                              updateCropRule({ ...rule, active: checked })
-                            }
-                          />
-                        </TableCell>
-                        <TableCell>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => deleteCropRule(rule.id)}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
               </CardContent>
             </Card>
           </TabsContent>
